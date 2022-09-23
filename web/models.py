@@ -13,7 +13,7 @@ class BaseModel(models.Model):
 
 class Tag(BaseModel):
     title = models.CharField(max_length=200)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     parent_tag = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
@@ -24,8 +24,8 @@ class Tag(BaseModel):
 class Note(BaseModel):
     title = models.CharField(max_length=500)
     text = models.TextField()
-    alert_send_at = models.DateTimeField()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    alert_send_at = models.DateTimeField(null=True)
     tags = models.ManyToManyField(Tag)
 
     def __str__(self):
