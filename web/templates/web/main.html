@@ -15,13 +15,45 @@
         {% filter_link "все заметки" "" query_params %} |
         {% filter_link "c напоминаниями" "with_alerts" query_params %}
     </p>
+
+    <form action="https://google.com/search" method="get">
+        <input type="text" name="q" placeholder="Поиск...">
+        <button>Найти в Google</button>
+    </form>
+
+    <br>
+
+    <form action="" method="get">
+        <input type="text" name="search" placeholder="Поиск..."
+               value="{{ search|default_if_none:'' }}">
+        <select name="tag_id">
+            <option value="">Выберите тег</option>
+            {% for tag in tags %}
+                <option
+                    value="{{ tag.id }}"
+                    {% if tag_id == tag.id %}selected{% endif %}
+                >
+                    {{ tag.title }}
+                </option>
+            {% endfor %}
+        </select>
+        <button>Найти</button>
+    </form>
+
     <ul>
         {% for note in notes %}
             <li>
                 <b>{{ note.title }}</b> <small>#{{ note.id }}</small>
+                <b>
+                    <a href="{% url "note" note.id %}">
+                        {{ note.title }}
+                    </a>
+                </b>
+                <small>#{{ note.id }}</small>
                 {% if note.alert_send_at %}
                     – напомнить в {{ note.alert_send_at|date:"d.m.Y H:i" }}
                 {% endif %}
+                <small>{{ note.text|slice:":15" }}...</small>
             </li>
         {% endfor %}
     </ul>
