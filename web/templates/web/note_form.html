@@ -1,0 +1,40 @@
+{% load notes %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление заметки</title>
+</head>
+<body>
+
+<a href="{% url 'notes_list' %}">Главная страница</a>
+
+<h1>Создание заметки</h1>
+{% if error %}
+    <b>Ошибка: {{ error }}</b>
+{% endif %}
+	<form action="" method="post">
+    {% csrf_token %}
+
+    <label>
+        Название <br>
+        <input
+            type="text"
+            name="title"
+            placeholder="Введите название"
+            value="{{ title|default_if_none:'' }}"
+        >    </label>
+    <br><br>
+
+    <label>
+        Текст <br>
+        <textarea name="text">{{ text|default_if_none:'' }}</textarea>
+    </label>
+    <br><br>
+
+    <button>Добавить заметку</button>
+</form>
+
+
+</body>
+</html>

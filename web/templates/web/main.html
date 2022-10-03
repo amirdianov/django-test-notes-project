@@ -31,14 +31,16 @@
             {% for tag in tags %}
                 <option
                     value="{{ tag.id }}"
-                    {% if tag_id == tag.id %}selected{% endif %}
-                >
+                    {% if tag_id == tag.id %}selected{% endif %}>
                     {{ tag.title }}
                 </option>
             {% endfor %}
         </select>
         <button>Найти</button>
     </form>
+
+        <br>
+    <a href="{% url 'notes_add' %}">Добавить заметку</a>
 
     <ul>
         {% for note in notes %}
@@ -57,6 +59,5 @@
             </li>
         {% endfor %}
     </ul>
-
 </body>
 </html>
