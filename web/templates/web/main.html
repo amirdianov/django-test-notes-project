@@ -40,12 +40,21 @@
     </form>
 
         <br>
-    <a href="{% url 'notes_add' %}">Добавить заметку</a>
 
+
+
+    	    <br>
+    {% if user.is_authenticated %}
+        <a href="{% url 'notes_add' %}">Добавить заметку</a>
+        <b>Вы вошли как {{ user.username }}</b>
+        <a href="{% url 'logout' %}">Выйти</a>
+    {% else %}
+        <a href="{% url 'registration' %}">Регистрация</a>
+        <a href="{% url 'login' %}">Вход</a>
+    {% endif %}
     <ul>
         {% for note in notes %}
             <li>
-                <b>{{ note.title }}</b> <small>#{{ note.id }}</small>
                 <b>
                     <a href="{% url "note" note.id %}">
                         {{ note.title }}
