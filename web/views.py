@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.views import View
+from django.views.generic import ListView
 
 from web.forms import NoteForm, AuthForm
 from web.models import Note, Tag, User
@@ -12,44 +14,53 @@ def main_view(request):
     return redirect("notes_list")
 
 
-def notes_view(request):
-    notes = Note.objects.all()
+class NotesListView(ListView):
+    template_name = 'web/main.html'
 
-    with_alerts = 'with_alerts' in request.GET
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Note.objects.none()
+        queryset = Note.objects.filter(user=self.request.user).order_by('-created_at')
+        return self.filter_queryset(queryset)
 
-    if request.user.is_authenticated:
-        notes = Note.objects.filter(user=request.user).order_by('-created_at')
-    else:
-        notes = Note.objects.none()
+    def filter_queryset(self, notes):
+        self.with_alerts = 'with_alerts' in self.request.GET
+        self.search = self.request.GET.get("search", None)
+        try:
+            self.tag_id = int(self.request.GET.get("tag_id", None))
+        except (TypeError, ValueError):
+            self.tag_id = None
 
-    if with_alerts:
-        notes = notes.filter(alert_send_at__isnull=False)
-    search = request.GET.get("search", None)
+        if self.with_alerts:
+            notes = notes.filter(alert_send_at__isnull=False)
 
-    if search:
-        # title__contains="..." SELECT * FROM web_note WHERE title LIKE = "%...%"
-        # title__icontains="..." SELECT * FROM web_note WHERE UPPER(title) LIKE = UPPER("%...%")
-        notes = notes.filter(
-            Q(title__icontains=search) |
-            Q(text__icontains=search)
-        )
-    try:
-        tag_id = int(request.GET.get("tag_id", None))
-    except (ValueError, TypeError):
-        tag_id = None
-    if tag_id:
-        tag = Tag.objects.get(id=tag_id)
-        notes = notes.filter(tags__in=[tag])
+        if self.search:
+            # title="..." SELECT * FROM web_note WHERE title = "..."
+            # title__iexact="..." SELECT * FROM web_note WHERE UPPER(title) = UPPER("...")
+            # title__contains="..." SELECT * FROM web_note WHERE title LIKE = "%...%"
+            # title__icontains="..." SELECT * FROM web_note WHERE UPPER(title) LIKE = UPPER("%...%")
+            notes = notes.filter(
+                Q(title__icontains=self.search) |
+                Q(text__icontains=self.search)
+            )
 
-    return render(request, "web/main.html", {
-        'count': Note.objects.count(),
-        'notes': notes,
-        'with_alerts': with_alerts,
-        'query_params': request.GET,
-        'search': search,
-        'tags': Tag.objects.all(),
-        'tag_id': tag_id
-    })
+        if self.tag_id:
+            tag = Tag.objects.get(id=self.tag_id)
+            notes = notes.filter(tags__in=[tag])
+        return notes
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        if not self.request.user.is_authenticated:
+            return {}
+        return {
+            **super(NotesListView, self).get_context_data(),
+            'count': Note.objects.filter(user=self.request.user).count(),
+            'with_alerts': self.with_alerts,
+            'search': self.search,
+            'tag_id': self.tag_id,
+            'query_params': self.request.GET,
+            'tags': Tag.objects.filter(user=self.request.user),
+        }
 
 
 @login_required
@@ -60,10 +71,10 @@ def note_view(request, id):
     })
 
 
-@login_required()
+@login_required
 def note_edit_view(request, id=None):
-    # user = User.objects.first()  # TODO get user from auth
     form = NoteForm()
+
     note = None
     if id is not None:
         note = get_object_or_404(Note, user=request.user, id=id)
@@ -71,30 +82,33 @@ def note_edit_view(request, id=None):
 
     if request.method == 'POST':
         form = NoteForm(request.POST, instance=note, initial={'user': request.user})
-
         if form.is_valid():
             note = form.save()
             return redirect('note', note.id)
-    return render(request, "web/note_form.html", {
 
+    return render(request, "web/note_form.html", {
         'id': id,
         'form': form
     })
 
 
-def registration_view(request):
-    form = AuthForm()
-    is_success = False
+class RegistrationView(View):
+    def _render(self, request, form=None, is_success=False):
+        return render(request, "web/registration.html", {
+            "form": form or AuthForm(),
+            'is_success': is_success
+        })
 
-    if request.method == 'POST':
+    def get(self, request, *args, **kwargs):
+        return self._render(request)
+
+    def post(self, request, *args, **kwargs):
+        is_success = False
         form = AuthForm(request.POST)
         if form.is_valid():
             User.objects.create_user(**form.cleaned_data)
             is_success = True
-    return render(request, "web/registration.html", {
-        "form": form,
-        'is_success': is_success
-    })
+        return self._render(request, form, is_success)
 
 
 def login_view(request):

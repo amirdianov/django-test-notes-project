@@ -1,31 +1,32 @@
-{% load notes %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Добавление заметки</title>
 </head>
 <body>
 
 <a href="{% url 'notes_list' %}">Главная страница</a>
-{%  if id %}
-    <a href="{% url 'note' id %}">Просмотр заметки</a>
+{% if id %}
+    <a href="{% url 'note' id %}">Перейти к заметке</a>
 {% endif %}
-<h1>Создание заметки</h1>
-{#{% if error %}#}
-{#    <b>Ошибка: {{ error }}</b>#}
-{#{% endif %}#}
+<h1>Добавление заметки</h1>
+
 {% if form.errors %}
-    <p>Ошибкииииииии</p>
+    <b>Возникли ошибки при заполнении формы. Пожалуйста, исправьте их:</b>
     {{ form.errors }}
 {% endif %}
-	<form action="" method="post">
+
+<form action="" method="post">
     {% csrf_token %}
-        {{ form.as_p }}
+
+    {{ form.as_p }}
 
     <button>Добавить заметку</button>
 </form>
-
 
 </body>
 </html>
