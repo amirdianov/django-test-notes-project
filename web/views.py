@@ -59,17 +59,18 @@ def note_view(request, id):
         'note': note
     })
 
+
 @login_required()
 def note_edit_view(request, id=None):
     # user = User.objects.first()  # TODO get user from auth
     form = NoteForm()
-
+    note = None
     if id is not None:
         note = get_object_or_404(Note, user=request.user, id=id)
         form = NoteForm(instance=note)
 
     if request.method == 'POST':
-        form = NoteForm(request.POST, initial={'user': request.user})
+        form = NoteForm(request.POST, instance=note, initial={'user': request.user})
 
         if form.is_valid():
             note = form.save()
@@ -88,10 +89,7 @@ def registration_view(request):
     if request.method == 'POST':
         form = AuthForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            user = User(username=username)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
+            User.objects.create_user(**form.cleaned_data)
             is_success = True
     return render(request, "web/registration.html", {
         "form": form,
