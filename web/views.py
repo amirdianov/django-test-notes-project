@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView
 
 from web.forms import NoteForm, AuthForm
 from web.models import Note, Tag, User
@@ -63,16 +63,28 @@ class NotesListView(ListView):
         }
 
 
-@login_required
-def note_view(request, id):
-    note = get_object_or_404(Note, user=request.user, id=id)
-    return render(request, "web/note.html", {
-        'note': note
-    })
+class NoteDetailView(DetailView):
+    template_name = 'web/note.html'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
+
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user)
+
+
+class NoteCreateFormView(CreateView):
+    form_class = NoteForm
+    template_name = 'web/note_form.html'
+
+    def get_initial(self):
+        return {'user': self.request.user}
+
+    def get_success_url(self):
+        return reverse('note', args=(self.object.title, self.object.id))
 
 
 @login_required
-def note_edit_view(request, id=None):
+def note_edit_view(request, id=None, title=None):
     form = NoteForm()
 
     note = None
@@ -84,11 +96,12 @@ def note_edit_view(request, id=None):
         form = NoteForm(request.POST, instance=note, initial={'user': request.user})
         if form.is_valid():
             note = form.save()
-            return redirect('note', note.id)
+            return redirect('note', note.title, note.id)
 
     return render(request, "web/note_form.html", {
         'id': id,
-        'form': form
+        'form': form,
+        'title': getattr(note, 'title')
     })
 
 
