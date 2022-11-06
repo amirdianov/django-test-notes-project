@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from web.models import Note
+from web.models import Note, Tag
 
 
 class NoteAdmin(admin.ModelAdmin):
@@ -19,3 +19,4 @@ class NoteAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Note, NoteAdmin)
+admin.site.register(Tag)
