@@ -150,3 +150,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('main')
+
+
+def html_view(request):
+    return render(request, 'web/html.html')

@@ -48,13 +48,7 @@
     <a href="{% url 'notes_add' %}">Добавить заметку</a>
 
     <br>
-    {% if user.is_authenticated %}
-        <b>Вы вошли как {{ user.email }}</b>
-        <a href="{% url 'logout' %}">Выйти</a>
-    {% else %}
-        <a href="{% url 'registration' %}">Регистрация</a>
-        <a href="{% url 'login' %}">Вход</a>
-    {% endif %}
+    {% include "web/partials/login_info.html" %}
 
     <ul>
         {% for note in object_list %}
