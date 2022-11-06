@@ -62,13 +62,16 @@ class Tag(BaseModel):
         null=True
     )
 
+    def __str__(self):
+        return f'{self.title}'
+
 
 class Note(BaseModel):
     title = models.CharField(max_length=500)
     text = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    alert_send_at = models.DateTimeField(null=True)
-    tags = models.ManyToManyField(Tag)
+    alert_send_at = models.DateTimeField(null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return f'Note {self.id} "{self.title}"'
