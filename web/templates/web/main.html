@@ -1,11 +1,7 @@
-{% load notes %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Заметки</title>
-</head>
-<body>
+{% extends 'web/base.html' %}
+{% block title %}Список заметок{% endblock %}
+{% block content %}
+    {% load notes %}
     <h1>Заметки</h1>
     <hr>
     <h2>Список заметок</h2>
@@ -33,8 +29,8 @@
             <option value="">Выберите тег</option>
             {% for tag in tags %}
                 <option
-                    value="{{ tag.id }}"
-                    {% if tag_id == tag.id %}selected{% endif %}
+                        value="{{ tag.id }}"
+                        {% if tag_id == tag.id %}selected{% endif %}
                 >
                     {{ tag.title }}
                 </option>
@@ -66,6 +62,4 @@
             </li>
         {% endfor %}
     </ul>
-
-</body>
-</html>
+{% endblock %}
