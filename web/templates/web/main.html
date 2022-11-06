@@ -1,9 +1,9 @@
 {% extends 'web/base.html' %}
+{% load notes %}
+
 {% block title %}Список заметок{% endblock %}
+
 {% block content %}
-    {% load notes %}
-    <h1>Заметки</h1>
-    <hr>
     <h2>Список заметок</h2>
     <p>
         Количество заметок: {{ count }}.
@@ -13,38 +13,39 @@
     </p>
 
     <form action="https://google.com/search" method="get">
-        <input type="text" name="q" placeholder="Поиск...">
-        <button>Найти в Google</button>
+        <input type="text" name="q" placeholder="Поиск..." class="form-control">
+        <button class="btn btn-primary">Найти в Google</button>
         (<a href="https://google.com" target="_blank">Google</a>)
     </form>
-
 
     <br>
 
     <form action="" method="get">
         <input type="text" name="search" placeholder="Поиск..."
-               value="{{ search|default_if_none:'' }}">
+               value="{{ search|default_if_none:'' }}"
+               class="form-control"
+        >
 
-        <select name="tag_id">
+        <select name="tag_id" class="form-select">
             <option value="">Выберите тег</option>
             {% for tag in tags %}
                 <option
-                        value="{{ tag.id }}"
-                        {% if tag_id == tag.id %}selected{% endif %}
+                    value="{{ tag.id }}"
+                    {% if tag_id == tag.id %}selected{% endif %}
                 >
                     {{ tag.title }}
                 </option>
             {% endfor %}
         </select>
 
-        <button>Найти</button>
+        <button class="btn btn-primary">Найти</button>
     </form>
 
     <br>
     <a href="{% url 'notes_add' %}">Добавить заметку</a>
 
     <br>
-    {% include "web/partials/login_info.html" %}
+    {% include 'web/partials/login_info.html' %}
 
     <ul>
         {% for note in object_list %}

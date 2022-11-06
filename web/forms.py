@@ -15,5 +15,13 @@ class NoteForm(forms.ModelForm):
 
 
 class AuthForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput())
+    email = forms.EmailField(widget=forms.EmailInput(
+        attrs={
+            'class': 'form-control'
+        }
+    ))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control'
+        }
+    ))
