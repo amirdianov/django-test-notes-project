@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -16,7 +16,11 @@ class NotesListView(ListView):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Note.objects.none()
-        queryset = Note.objects.filter(user=self.request.user).order_by('-created_at')
+        queryset = (
+            Note.objects.filter(user=self.request.user)
+            .annotate(comments_count=Count("comments"))
+            .order_by('-created_at')
+        )
         return self.filter_queryset(queryset)
 
     def filter_queryset(self, notes):
