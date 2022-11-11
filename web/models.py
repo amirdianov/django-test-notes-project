@@ -52,6 +52,10 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+    class Meta:
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
+
 
 class Tag(BaseModel):
     title = models.CharField(max_length=200)
@@ -63,6 +67,11 @@ class Tag(BaseModel):
         blank=True
     )
 
+    class Meta:
+        verbose_name = 'тег'
+
+        verbose_name_plural = 'теги'
+
     def __str__(self):
         return f'{self.title}'
 
@@ -73,6 +82,10 @@ class Note(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     alert_send_at = models.DateTimeField(null=True, blank=True, verbose_name='Время напоминания')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='Теги')
+
+    class Meta:
+        verbose_name = 'заметка'
+        verbose_name_plural = 'заметки'
 
     def __str__(self):
         return f'Note {self.id} "{self.title}"'
