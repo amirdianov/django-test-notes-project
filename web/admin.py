@@ -1,7 +1,7 @@
 from django.contrib import admin, messages
 
 # Register your models here.
-from web.models import Note, Tag
+from web.models import Note, Tag, NoteComment
 
 
 @admin.display(description='Привести название к верхнему регистру')
@@ -36,6 +36,7 @@ class NoteAdmin(admin.ModelAdmin):
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'user')
+    list_display_links = ('id', 'title')
 
     def has_delete_permission(self, request, obj=None):
         if obj is None:
@@ -51,4 +52,4 @@ class TagAdmin(admin.ModelAdmin):
 
 admin.site.register(Note, NoteAdmin)
 admin.site.register(Tag, TagAdmin)
-
+admin.site.register(NoteComment)
