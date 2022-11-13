@@ -88,6 +88,7 @@ class NoteQuerySet(QuerySet):
 
 
 class Note(BaseModel):
+    objects = NoteQuerySet.as_manager()
 
     title = models.CharField(max_length=500, verbose_name='Название')
     text = models.TextField(verbose_name='Текст')
