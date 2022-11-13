@@ -55,7 +55,7 @@
                     </a>
                 </b>
                 <small>#{{ note.id }}
-                    ({{ note.comments.all.0.text }})
+                    ({{ note.last_comments.0.text }})
                     {#                    note.comments.all()[0].text #}
                     <b>{{ note.comments_count }}</b>комментариев
                     {{ note.user.email }}
