@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -92,6 +94,14 @@ class NoteQuerySet(QuerySet):
         )
 
 
+def get_note_file_path(instance, filename):
+    return os.path.join("note_files", instance.created_at.strftime("%Y-%m-%d"), filename)
+
+
+def get_note_image_path(instance, filename):
+    return os.path.join("note_images", instance.created_at.strftime("%Y-%m-%d"), filename)
+
+
 class Note(BaseModel):
     objects = NoteQuerySet.as_manager()
 
@@ -100,8 +110,14 @@ class Note(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     alert_send_at = models.DateTimeField(null=True, blank=True, verbose_name='Время напоминания')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='Теги')
-    file = models.FileField(null=True, blank=True, verbose_name='Файл')
-
+    file = models.FileField(
+        upload_to=get_note_file_path,
+        null=True, blank=True, verbose_name='Файл',
+    )
+    image = models.ImageField(
+        upload_to=get_note_image_path,
+        null=True, blank=True, verbose_name='Картинка'
+    )
 
     class Meta:
         verbose_name = 'заметка'
