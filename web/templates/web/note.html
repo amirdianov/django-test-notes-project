@@ -12,8 +12,14 @@
         <a href="{{ object.file.url }}">Скачать файл</a>
     {% endif %}
     {% if object.image %}
-        <img src="{{ object.image.url }}" alt="Картинка">
-    {% endif %}
+        <a href="{{ object.image.url }}" target="_blank">
+            <img
+                    src="{{ object.image.thumbnail.url }}"
+                    alt="Картинка"
+                    style="border: 1px solid #ccc"
+            >
+        </a>    {% endif %}
+
     <p>
         <small>
             Создана {{ object.created_at|date:'d.m.Y H:i' }}.
