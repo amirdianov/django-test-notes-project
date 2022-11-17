@@ -2,18 +2,15 @@ from datetime import datetime
 from http import HTTPStatus
 
 from django.test import TestCase
-
-# Create your tests here.
 from django.urls import reverse
 
-from web.models import Note, User
+from web.tests.factories import NoteFactory
 
 
 class NoteFiltersTestCase(TestCase):
     def setUp(self) -> None:
-        self.user = User.objects.create(email='test@test.ru')
-        self.note = Note.objects.create(title='test note title', text='test', user=self.user)
-        self.client.force_login(self.user)
+        self.note = NoteFactory()
+        self.client.force_login(self.note.user)
 
     def _check_response(self, query_params=None):
         response = self.client.get(reverse('notes_list'), data=query_params)
@@ -25,11 +22,8 @@ class NoteFiltersTestCase(TestCase):
         self.assertContains(response, self.note.title)
 
     def test_list_with_alerts(self):
-        note_with_alert = Note.objects.create(
-            title='note with alert',
-            text='test',
-            user=self.user,
-            alert_send_at=datetime.now()
+        note_with_alert = NoteFactory(
+            user=self.note.user, alert_send_at=datetime.now()
         )
         response = self._check_response({"with_alerts": 1})
         self.assertNotContains(response, self.note.title)
