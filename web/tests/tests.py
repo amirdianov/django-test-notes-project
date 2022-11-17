@@ -7,6 +7,13 @@ from django.urls import reverse
 from web.tests.factories import NoteFactory
 
 
+class UnauthorizedTestCase(TestCase):
+    def test_unauthorized(self):
+        response = self.client.get(reverse("notes_list"))
+        registration_link = reverse('registration')
+        self.assertContains(response, registration_link)
+
+
 class NoteFiltersTestCase(TestCase):
     def setUp(self) -> None:
         self.note = NoteFactory()
