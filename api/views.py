@@ -16,11 +16,9 @@ def status_view(request):
 @api_view(['GET', 'POST'])
 def notes_view(request):
     if request.method == 'POST':
-        data = request.data
         serializer = NoteSerializer(
-            data=data,
+            data=request.data,
             context={"request": request},
-            initial={"user_id": request.user.id}
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -32,8 +30,17 @@ def notes_view(request):
     return Response(serializer.data)
 
 
-@api_view()
+@api_view(['GET', 'PUT'])
 def note_view(request, id):
     note = get_object_or_404(Note, id=id)
+    if request.method == "PUT":
+        serializer = NoteSerializer(
+            instance=note,
+            data=request.data,
+            context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     serializer = NoteSerializer(note)
     return Response(serializer.data)
