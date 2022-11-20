@@ -19,7 +19,7 @@ from django.views.generic import RedirectView
 from api.views import status_view, notes_view, note_view
 
 urlpatterns = [
-    path("", status_view),
-    path("notes/", notes_view),
-    path("notes/<int:id>/", note_view)
+    path("", status_view, name='status'),
+    path("notes/", notes_view, name='notes'),
+    path("notes/<int:id>/", note_view, name='note')
 ]
