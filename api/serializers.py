@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
+from web.models import Note
 
-class NoteSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ('id', 'title', 'created_at')
