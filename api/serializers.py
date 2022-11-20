@@ -21,6 +21,9 @@ class NoteSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
     text = serializers.CharField(write_only=True)
 
+    def validate_title(self, value):
+        return value.strip()
+
     def validate(self, attrs):
         # TODO set real user after auth implementation
         attrs['user_id'] = User.objects.first().id  # self.context['request'].user.id
