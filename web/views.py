@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Max, Min
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, RedirectView, FormView, CreateView, UpdateView, DeleteView
 
 from web.forms import NoteForm, AuthForm
@@ -160,6 +162,7 @@ def logout_view(request):
 def html_view(request):
     return render(request, 'web/html.html')
 
+
 @login_required
 def stat_view(request):
     notes = Note.objects.filter(user=request.user)
@@ -170,3 +173,10 @@ def stat_view(request):
         first_created_at=Min("created_at"),
         last_updated_at=Max("created_at")
     ))
+
+
+@csrf_exempt
+def example_api_view(request):
+    return JsonResponse({
+        "status": "ok"
+    })
