@@ -16,10 +16,12 @@ Including another URLconf
 from django.urls import path
 from django.views.generic import RedirectView
 
-from api.views import status_view, notes_view, note_view
+from api.views import status_view, notes_view, note_view, NoteViewSet
 
 urlpatterns = [
     path("", status_view, name='status'),
+    path("notes/", NoteViewSet.as_view({"get": "list"}), name='notes'),
     path("notes/", notes_view, name='notes'),
     path("notes/<int:id>/", note_view, name='note')
+
 ]
