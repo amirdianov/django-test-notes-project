@@ -16,8 +16,10 @@ Including another URLconf
 from django.urls import path
 from django.views.generic import RedirectView
 
+from api.views import status_view, notes_view
 
 urlpatterns = [
     path("", status_view),
+    path("notes/", notes_view)
 
 ]
