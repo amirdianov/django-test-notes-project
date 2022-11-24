@@ -14,7 +14,7 @@ def status_view(request):
     return Response({"status": "ok"})
 
 
-class NoteViewSet(ModelViewSet):
+class  NoteViewSet(ModelViewSet):
     queryset = Note.objects.all().optimize_for_lists().prefetch_related(
         Prefetch('comments', NoteComment.objects.all().order_by("created_at"))
     )
