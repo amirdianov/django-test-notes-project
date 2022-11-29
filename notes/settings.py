@@ -80,10 +80,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("DB_NAME", "notes"),
-        "USER": os.environ.get("DB_USER", "postgres"),
+        "USER": os.environ.get("DB_USER", "notes"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "Amir2003"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
-        "PORT": int(os.environ.get("DB_PORT", 5432))
+        "PORT": int(os.environ.get("DB_PORT", 5433))
     }
 }
 
@@ -123,7 +123,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = "static"
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -5,12 +5,12 @@
 
 {% block content %}
     <h2>Список заметок</h2>
-    <p>
-        Количество заметок: {{ count }}.
-        Выводить
-        {% filter_link "все заметки" "" query_params %} |
-        {% filter_link "c напоминаниями" "with_alerts" query_params %}
-    </p>
+{#    <p>#}
+{#        Количество заметок: {{ count }}.#}
+{#        Выводить#}
+{#        {% filter_link "все заметки" "" query_params %} |#}
+{#        {% filter_link "c напоминаниями" "with_alerts" query_params %}#}
+{#    </p>#}
 
     <form action="https://google.com/search" method="get">
         <input type="text" name="q" placeholder="Поиск..." class="form-control">
