@@ -1,18 +1,28 @@
 version: '3'
 
 services:
+  nginx:
+    image: django2k-nginx:latest
+    build:
+      context: ..
+      dockerfile: deploy/nginx/Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
   app:
     image: django2k:latest
     build:
-      dockerfile: deploy/Dockerfile
+      dockerfile: deploy/app/Dockerfile
       context: ..
     ports:
       - "8000:8000"
     depends_on:
       - db
     environment:
-        DB_HOST: "db"
-        DB_PORT: "5432"
+      DB_HOST: "db"
+      DB_PORT: "5432"
     restart: always
 
   db:
