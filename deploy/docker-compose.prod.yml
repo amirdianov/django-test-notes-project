@@ -12,6 +12,8 @@ services:
       - app
     volumes:
       - static:/app/static
+      - media:/app/media
+
 
   app:
     image: django2k:latest
@@ -28,6 +30,8 @@ services:
     restart: always
     volumes:
       - static:/app/static
+      - media:/app/media
+
 
   db:
     image: postgres:14-alpine
@@ -44,4 +48,4 @@ services:
 volumes:
   db:
   static:
-
+  media:
