@@ -20,7 +20,7 @@ from rest_framework.routers import SimpleRouter
 from api.views import status_view, NoteViewSet
 
 router = SimpleRouter()
-router.register('notes', NoteViewSet)
+router.register('notes', NoteViewSet, basename='notes')
 
 urlpatterns = [
     path("", status_view, name='status'),
