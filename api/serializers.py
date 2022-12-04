@@ -23,6 +23,7 @@ class NoteSerializer(serializers.ModelSerializer):
     text = serializers.CharField(write_only=True)
 
     image = StdImageField(allow_null=True, required=False)
+    text2 = serializers.CharField(source='text', read_only=True)
 
     def validate_title(self, value):
         return value.strip()
@@ -34,4 +35,5 @@ class NoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Note
-        fields = ('id', 'title', "text", 'user', 'image','comments', 'created_at')
+        fields = ('id', 'title', "text", "text2", 'user', 'comments', 'image', 'created_at')
+        read_only_fields = ('title',)
