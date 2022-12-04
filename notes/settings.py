@@ -134,3 +134,10 @@ LOGIN_URL = '/login/'
 
 MEDIA_ROOT = "media"
 MEDIA_URL = "user_media/"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}
