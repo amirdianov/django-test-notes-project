@@ -49,3 +49,11 @@ def test_note_update(api_client, note):
     assert response.status_code == status.HTTP_200_OK, response.content
     note.refresh_from_db()
     assert note.title == "new_title"
+
+
+def test_note_share(api_client, note):
+    api_client.force_login(note.user)
+    response = api_client.post(
+        reverse("notes-share", args=(note.id,)),
+    )
+    assert response.status_code == status.HTTP_200_OK, response.content

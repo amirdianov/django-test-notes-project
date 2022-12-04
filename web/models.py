@@ -125,6 +125,7 @@ class Note(BaseModel):
             }
         }
     )
+    is_shared = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'заметка'
