@@ -10,7 +10,7 @@ RUN apt-get update -qq >/dev/null  &&  \
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-
+#pip install uwsgi~=...
 
 COPY .. .
 

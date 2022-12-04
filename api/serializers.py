@@ -26,7 +26,7 @@ class NoteSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         # TODO set real user after auth implementation
-        attrs['user_id'] = User.objects.first().id  # self.context['request'].user.id
+        attrs['user_id'] = self.context['request'].user.id
         return attrs
 
     class Meta:
