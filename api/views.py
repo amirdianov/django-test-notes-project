@@ -17,7 +17,6 @@ def status_view(request):
 
 
 class  NoteViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
     queryset = Note.objects.all().optimize_for_lists().prefetch_related(
         Prefetch('comments', NoteComment.objects.all().order_by("created_at"))
     )
