@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from api.filelds import StdImageField
 from web.models import Note, User, NoteComment
 
 
@@ -20,10 +21,8 @@ class NoteSerializer(serializers.ModelSerializer):
 
     comments = CommentSerializer(many=True, read_only=True)
     text = serializers.CharField(write_only=True)
-    thumbnail_src = serializers.SerializerMethodField()
 
-    def get_thumbnail_src(self, instance):
-        return self.context['request'].build_absolute_uri(instance.image.thumbnail.url)
+    image = StdImageField()
 
     def validate_title(self, value):
         return value.strip()
@@ -35,4 +34,4 @@ class NoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Note
-        fields = ('id', 'title', "text", 'user', 'image', 'thumbnail_src','comments', 'created_at')
+        fields = ('id', 'title', "text", 'user', 'image','comments', 'created_at')
