@@ -17,12 +17,12 @@ def status_view(request):
 
 
 class NoteViewSet(ModelViewSet):
-    serializer_class = NoteSerializer
+    # serializer_class = NoteSerializer
 
-    def get_queryset(self):
-        return Note.objects.all().optimize_for_lists().prefetch_related(
-            Prefetch('comments', NoteComment.objects.all().order_by("created_at"))
-        ).filter(user=self.request.user)
+    def get_serializer(self, *args, **kwargs):
+        return NoteSerializer(*args, **kwargs, context={
+            "request": self.request
+        })
 
 # @api_view(['GET', 'POST'])
 # def notes_view(request):
