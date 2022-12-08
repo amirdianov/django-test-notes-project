@@ -10,17 +10,20 @@ RUN apt-get update -qq >/dev/null  &&  \
     rm -rf /var/lib/apt/lists/* &&  \
     pip install -U pip wheel
 
+RUN git init  # for pre commit hook
+
 #COPY requirements.txt .
 #RUN pip install -r requirements.txt
 pip install uWSGI==2.0.21
 COPY pyproject.toml .
 COPY poetry.lock .
-RUN poetry install
+COPY .pre-commit-config.yaml .
+RUN poetry install && pre-commit install --install-hooks
 
 
 COPY .. .
 
-RUN python manage.py collectstatic --noinput
+RUN pre-commit run -a && python src/manage.py collectstatic --noinput
 
 
 EXPOSE 8000
