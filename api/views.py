@@ -7,21 +7,33 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from api.serializers import NoteSerializer
+from api.serializers import NoteSerializer, StatusSerializer, NoteEditorSerializer
 from web.models import Note, NoteComment
 from web.services import share_note
 
 
-@swagger_auto_schema(method='GET', operation_id="api_status")
-@api_view()
+@swagger_auto_schema(
+    method='GET',
+    operation_id="api_status",
+    responses={
+        status.HTTP_200_OK: StatusSerializer()
+    }
+)
+@ api_view()
 @permission_classes([])
 def status_view(request):
     """Проверить API"""
-    return Response({"status": "ok", "user_id": request.user.id})
+    return Response(StatusSerializer({"status": "ok", "user_id": request.user.id}).data)
 
 
 class NoteViewSet(ModelViewSet):
-    serializer_class = NoteSerializer
+    def get_serializer_class(self):
+        if self.action in ("create", "update", "partial_update"):
+            return NoteEditorSerializer
+
+        if self.action == 'share':
+            return None
+        return NoteSerializer
 
     def get_queryset(self):
         return Note.objects.all().optimize_for_lists().prefetch_related(

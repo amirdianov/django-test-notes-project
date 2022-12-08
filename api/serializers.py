@@ -3,6 +3,9 @@ from rest_framework import serializers
 from api.filelds import StdImageField
 from web.models import Note, User, NoteComment
 
+class StatusSerializer(serializers.Serializer):
+    status = serializers.CharField()
+    user_id = serializers.IntegerField()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +19,16 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'text')
 
 
-class NoteSerializer(serializers.ModelSerializer):
+class NoteEditorSerializer(serializers.ModelSerializer):
+    text = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Note
+        fields = ('id', "text")
+        read_only_fields = ('title',)
+
+
+class NoteSerializer(NoteEditorSerializer):
     user = UserSerializer(read_only=True)
 
     comments = CommentSerializer(many=True, read_only=True)
