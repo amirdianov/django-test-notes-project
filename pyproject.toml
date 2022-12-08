@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "django-test-project"
+version = "0.1.0"
+description = ""
+authors = ["diyanovamir <amirdianov@gmail.com>"]
+readme = "README.md"
+packages = [{include = "django_test_project"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+django = ">=4.1.1,<4.2.0"
+psycopg2-binary = ">=2.9.3,<2.10.0"
+pillow = "9.3.0"
+django-stdimage = "6.0.1"
+factory-boy = "3.2.1"
+pytest = "7.2.0"
+pytest-django = "4.5.2"
+djangorestframework = ">=3.14.0,<3.15.0"
+drf-yasg = "1.21.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
