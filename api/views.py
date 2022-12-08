@@ -1,4 +1,5 @@
 from django.db.models import Prefetch
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
 from rest_framework.generics import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes, action
@@ -11,9 +12,11 @@ from web.models import Note, NoteComment
 from web.services import share_note
 
 
+@swagger_auto_schema(method='GET', operation_id="api_status")
 @api_view()
 @permission_classes([])
 def status_view(request):
+    """Проверить API"""
     return Response({"status": "ok", "user_id": request.user.id})
 
 

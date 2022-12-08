@@ -186,6 +186,7 @@ def example_api_view(request):
 
 @api_view(['GET', 'POST', 'PUT'])
 def example_api2_view(request):
+    """Тестовое API"""
     return Response({
         "status": "ok"
     })

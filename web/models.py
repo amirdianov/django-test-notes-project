@@ -106,7 +106,7 @@ def get_note_image_path(instance, filename):
 class Note(BaseModel):
     objects = NoteQuerySet.as_manager()
 
-    title = models.CharField(max_length=500, verbose_name='Название')
+    title = models.CharField(max_length=500, verbose_name='Название', help_text="Название заметки")
     text = models.TextField(verbose_name='Текст')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     alert_send_at = models.DateTimeField(null=True, blank=True, verbose_name='Время напоминания')
