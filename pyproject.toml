@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["diyanovamir <amirdianov@gmail.com>"]
 readme = "README.md"
-packages = [{include = "django_test_project"}]
+packages = [{ include = "django_test_project" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -19,6 +19,11 @@ djangorestframework = ">=3.14.0,<3.15.0"
 drf-yasg = "1.21.4"
 
 
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+[tool.black]
+line-length = 120
