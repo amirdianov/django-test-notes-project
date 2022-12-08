@@ -9,3 +9,7 @@
 - `python src/manage.py migrate` - выполнить миграции
 - `python src/manage.py runserver` - запуск сервера для разработки на http://localhost:8000
 - `pytest` - запустить автоматические тесты
+
+
+Для того, чтобы узнать расположение интерпретатора для настройки в PyCharm, 
+можно выполнить команду `poetry env info -p`.
