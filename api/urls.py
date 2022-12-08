@@ -13,21 +13,37 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic import RedirectView
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
 
 from api.views import status_view, NoteViewSet
 
 router = SimpleRouter()
 router.register('notes', NoteViewSet, basename='notes')
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Notes API",
+        default_version='v1',
+        description="django test project",
+        contact=openapi.Contact(email="developer@notes.com"),
+    ),
+    public=True,
+    permission_classes=[],
+)
 
 urlpatterns = [
-    path("", status_view, name='status'),
-    # path("notes/", NoteViewSet.as_view({"get": "list", "post": "create"}), name='notes'),
-    # # path("notes/", notes_view, name='notes'),
-    # # path("notes/<int:id>/", note_view, name='note'),
-    # path("notes/<int:pk>/", NoteViewSet.as_view({"get": "retrieve", "put": "update", "patch": "partial_update"}),
-    #      name='note')
+                  path("", status_view, name='status'),
+                  # path("notes/", NoteViewSet.as_view({"get": "list", "post": "create"}), name='notes'),
+                  # # path("notes/", notes_view, name='notes'),
+                  # # path("notes/<int:id>/", note_view, name='note'),
+                  # path("notes/<int:pk>/", NoteViewSet.as_view({"get": "retrieve", "put": "update", "patch": "partial_update"}),
+                  #      name='note')
+                  re_path('^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0),
+                          name='schema-json'),
+                  path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+                  path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-] + router.urls
+              ] + router.urls
