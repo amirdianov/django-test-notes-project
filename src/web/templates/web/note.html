@@ -2,9 +2,16 @@
 {% block title %}Заметка {{ object.title }}{% endblock %}
 
 {% block content %}
-    <a href="{% url 'notes_list' %}">Назад</a>
-    <a href="{% url 'note_edit' object.title object.id %}">Редактировать заметку</a>
-    <a href="{% url 'note_delete' object.title object.id %}">Удалить заметку</a>
+    {% if user.is_authorized %}
+        <a href="{% url 'notes_list' %}">Назад</a>
+        {% if object.is_shared %}
+            <i>Заметка опубликована</i>
+        {% else %}
+            <a href="{% url 'note_share' object.title object.id %}">Поделиться заметкой</a>
+        {% endif %}
+        <a href="{% url 'note_edit' object.title object.id %}">Редактировать заметку</a>
+        <a href="{% url 'note_delete' object.title object.id %}">Удалить заметку</a>
+    {% endif %}
     <h1>{{ object.title }}</h1>
 
     <p>{{ object.text }}</p>

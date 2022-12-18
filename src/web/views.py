@@ -12,6 +12,7 @@ from rest_framework.response import Response
 
 from web.forms import NoteForm, AuthForm
 from web.models import Note, Tag, User
+from web.services import share_note
 
 
 class NotesListView(ListView):
@@ -66,7 +67,10 @@ class NoteDetailView(DetailView):
     slug_url_kwarg = "id"
 
     def get_queryset(self):
-        return Note.objects.filter(user=self.request.user)
+        clause = Q(is_shared=True)
+        if not self.request.user.is_anonymous:
+            clause |= Q(user=self.request.user)
+        return Note.objects.filter(clause)
 
 
 class NoteMixin:
@@ -176,3 +180,10 @@ def example_api_view(request):
 def example_api2_view(request):
     """Тестовое API"""
     return Response({"status": "ok"})
+
+
+@login_required
+def note_share(request, title, id):
+    note = get_object_or_404(Note, id=id)
+    share_note(note)
+    return redirect("note", title, id)
