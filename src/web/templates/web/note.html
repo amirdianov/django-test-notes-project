@@ -2,7 +2,7 @@
 {% block title %}Заметка {{ object.title }}{% endblock %}
 
 {% block content %}
-    {% if user.is_authorized %}
+{#    {% if user.is_authorized %}#}
         <a href="{% url 'notes_list' %}">Назад</a>
         {% if object.is_shared %}
             <i>Заметка опубликована</i>
@@ -11,7 +11,7 @@
         {% endif %}
         <a href="{% url 'note_edit' object.title object.id %}">Редактировать заметку</a>
         <a href="{% url 'note_delete' object.title object.id %}">Удалить заметку</a>
-    {% endif %}
+{#    {% endif %}#}
     <h1>{{ object.title }}</h1>
 
     <p>{{ object.text }}</p>
@@ -33,4 +33,11 @@
             Обновлена {{ object.updated_at|date:'d.m.Y H:i' }}.
         </small>
     </p>
+
+    <b>Добавить комментарий</b>
+    <form action="{% url 'note_comment' object.id %}" method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button class="btn btn-outline-primary">Добавить комментарий</button>
+    </form>
 {% endblock %}

@@ -82,6 +82,12 @@ class NoteQuerySet(QuerySet):
             .annotate(comments_count=Count("comments"))
         )
 
+    def has_access(self, user=None):
+        clause = Q(is_shared=True)
+        if user:
+            clause |= Q(user=user)
+        return self.filter(clause)
+
 
 def get_note_file_path(instance, filename):
     return os.path.join("note_files", instance.created_at.strftime("%Y-%m-%d"), filename)
@@ -142,7 +148,7 @@ class Note(BaseModel):
 class NoteComment(BaseModel):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, verbose_name="Заметка", related_name="comments")
     text = models.TextField(verbose_name="Текст")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор комментария")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор комментария", null=True, blank=True)
 
     def __str__(self):
         return self.text

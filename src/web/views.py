@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Max, Min
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView, RedirectView, FormView, C
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from web.forms import NoteForm, AuthForm
+from web.forms import NoteForm, AuthForm, NoteCommentForm
 from web.models import Note, Tag, User
 from web.services import share_note
 
@@ -67,10 +67,26 @@ class NoteDetailView(DetailView):
     slug_url_kwarg = "id"
 
     def get_queryset(self):
-        clause = Q(is_shared=True)
-        if not self.request.user.is_anonymous:
-            clause |= Q(user=self.request.user)
-        return Note.objects.filter(clause)
+        user = None if self.request.user.is_anonymous else self.request.user
+        return Note.objects.all().has_access(user)
+
+    def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            "comment_form": NoteCommentForm(initial={"note_id": self.object.id}),
+        }
+
+
+def note_comment(request, id):
+    user = None if request.user.is_anonymous else request.user
+    note = Note.objects.all().has_access(user).filter(id=id).first()
+    if not note:
+        raise Http404
+    form = NoteCommentForm(data=request.POST, initial={"user": user, "note": note})
+    if not form.is_valid():
+        return HttpResponse("Ошибка при создании комментария, попробуйте еще раз")
+    form.save()
+    return redirect("note", note.title, note.id)
 
 
 class NoteMixin:

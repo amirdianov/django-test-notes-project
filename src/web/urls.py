@@ -30,6 +30,7 @@ from web.views import (
     example_api_view,
     example_api2_view,
     note_share,
+    note_comment,
 )
 
 urlpatterns = [
@@ -41,6 +42,7 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("stat/", stat_view, name="stat"),
     path("notes/", NotesListView.as_view(), name="notes_list"),
+    path("notes/<int:id>/comment/", note_comment, name="note_comment"),
     path("notes/add/", NoteCreateFormView.as_view(), name="notes_add"),
     path("notes/<str:title>/<int:id>/share/", note_share, name="note_share"),
     path("notes/<str:title>/<int:id>/edit/", NoteUpdateView.as_view(), name="note_edit"),
