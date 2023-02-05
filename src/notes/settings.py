@@ -81,10 +81,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("DB_NAME", "notes"),
-        "USER": os.environ.get("DB_USER", "postgres"),
+        "USER": os.environ.get("DB_USER", "notes"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "Amir2003"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
-        "PORT": int(os.environ.get("DB_PORT", 5432)),
+        "PORT": int(os.environ.get("DB_PORT", 5433)),
     }
 }
 
@@ -142,3 +142,6 @@ REST_FRAMEWORK = {
 }
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "from@example.com")
