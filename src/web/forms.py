@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
 from web.models import Note, NoteComment
 from web.tasks import send_comment_notification
@@ -23,9 +24,12 @@ class AuthForm(forms.Form):
 class NoteCommentForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         self.instance.user = self.initial["user"]
-        self.instance.note = self.initial["note"]
+        note = self.initial["note"]
+        self.instance.note = note
         instance = super(NoteCommentForm, self).save(*args, **kwargs)
-        send_comment_notification.delay(instance.id)
+        request = self.initial["request"]
+        link = request.build_absolute_uri(reverse("note", args=(note.title, note.id)))
+        send_comment_notification.delay(instance.id, link)
         return instance
 
     class Meta:

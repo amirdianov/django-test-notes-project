@@ -82,7 +82,7 @@ def note_comment(request, id):
     note = Note.objects.all().has_access(user).filter(id=id).first()
     if not note:
         raise Http404
-    form = NoteCommentForm(data=request.POST, initial={"user": user, "note": note})
+    form = NoteCommentForm(data=request.POST, initial={"user": user, "note": note, "request": request})
     if not form.is_valid():
         return HttpResponse("Ошибка при создании комментария, попробуйте еще раз")
     form.save()
