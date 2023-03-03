@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 from web.views import (
     login_view,
@@ -49,4 +49,5 @@ urlpatterns = [
     path("notes/<str:title>/<int:id>/", NoteDetailView.as_view(), name="note"),
     path("notes/<str:title>/<int:id>/delete/", NoteDeleteView.as_view(), name="note_delete"),
     path("html_view/", html_view),
+    path("js/", TemplateView.as_view(template_name="web/js.html")),
 ]

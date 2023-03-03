@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% csrf_token %}
+
+<script>
+    async function main() {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const result = await fetch("/api/notes/", {
+            method: "post",
+            body: JSON.stringify(
+                {text: 'note from js'},
+            ),
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': csrftoken
+
+            }
+        })
+        const data = await result.json();
+        console.log(data)
+    }
+
+    main()
+</script>
+</body>
+</html>

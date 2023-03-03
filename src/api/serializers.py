@@ -29,6 +29,11 @@ class NoteEditorSerializer(serializers.ModelSerializer):
         fields = ("id", "text")
         read_only_fields = ("title",)
 
+    def validate(self, attrs):
+        # TODO set real user after auth implementation
+        attrs["user_id"] = self.context["request"].user.id
+        return attrs
+
 
 class NoteSerializer(NoteEditorSerializer):
     user = UserSerializer(read_only=True)
