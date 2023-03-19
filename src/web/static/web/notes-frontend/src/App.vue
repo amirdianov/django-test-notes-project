@@ -1,3 +1,5 @@
+<script setup>
+import NotesList from "@/containers/NotesList.vue";</script>
 <template>
-  <h1>Фронт загружен</h1>
+  <NotesList></NotesList>
 </template>

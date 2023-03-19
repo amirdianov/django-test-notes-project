@@ -45,32 +45,36 @@
 
     <br>
 
-    <ul>
-        {% for note in object_list %}
-            <li>
-                <b>
-                    <a href="{% url "note" note.title note.id %}">
-                        {{ note.title }}
-                    </a>
-                </b>
-                <small>#{{ note.id }}
-                    ({{ note.last_comments.0.text }})
-                    {#                    note.comments.all()[0].text #}
-                    <b>{{ note.comments_count }}</b>комментариев
-                    {{ note.user.email }}
+    {#    <ul>#}
+    {#        {% for note in object_list %}#}
+    {#            <li>#}
+    {#                <b>#}
+    {#                    <a href="{% url "note" note.title note.id %}">#}
+    {#                        {{ note.title }}#}
+    {#                    </a>#}
+    {#                </b>#}
+    {#                <small>#{{ note.id }}#}
+    {#                    ({{ note.last_comments.0.text }})#}
+    {#                    note.comments.all()[0].text #}
+    {#                    <b>{{ note.comments_count }}</b>комментариев#}
+    {#                    {{ note.user.email }}#}
+    {##}
+    {#                </small>#}
+    {##}
+    {#                {% if note.alert_send_at %}#}
+    {#                    – напомнить в {{ note.alert_send_at|date:"d.m.Y H:i" }}#}
+    {#                {% endif %}#}
+    {#                <small>{{ note.text|slice:":15" }}...</small>#}
+    {#            </li>#}
+    {#        {% endfor %}#}
+    {#    </ul>#}
 
-                </small>
+    <div id="app">
+        <div id="app">
+            <h1>Загрузка...</h1>
+        </div>
+    </div>
 
-                {% if note.alert_send_at %}
-                    – напомнить в {{ note.alert_send_at|date:"d.m.Y H:i" }}
-                {% endif %}
-                <small>{{ note.text|slice:":15" }}...</small>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <div id="app"></div>
-
-    <link rel="stylesheet" href="{% static 'web/notes-frontend/dist/assets/index.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'web/notes-frontend/dist/assets/index.css' %}">#}
     <script type="module" src="{% static 'web/notes-frontend/dist/assets/index.js' %}"></script>
 {% endblock %}
