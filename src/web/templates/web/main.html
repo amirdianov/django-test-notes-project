@@ -1,5 +1,5 @@
 {% extends 'web/base.html' %}
-{% load notes %}
+{% load notes static %}
 
 {% block title %}Список заметок{% endblock %}
 
@@ -68,4 +68,9 @@
             </li>
         {% endfor %}
     </ul>
+
+    <div id="app"></div>
+
+    <link rel="stylesheet" href="{% static 'web/notes-frontend/dist/assets/index.css' %}">
+    <script type="module" src="{% static 'web/notes-frontend/dist/assets/index.js' %}"></script>
 {% endblock %}
