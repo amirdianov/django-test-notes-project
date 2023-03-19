@@ -1,3 +1,5 @@
+import time
+
 from django.db.models import Prefetch
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
@@ -17,6 +19,7 @@ from web.services import share_note
 @permission_classes([])
 def status_view(request):
     """Проверить API"""
+    time.sleep(10)
     return Response(StatusSerializer({"status": "ok", "user_id": request.user.id}).data)
 
 

@@ -155,4 +155,4 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:63342"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:63342", "http://localhost:5173"]
