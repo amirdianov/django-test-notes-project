@@ -1,6 +1,6 @@
 {% extends 'web/base.html' %}
 {% load notes %}
-
+{% load static %}
 {% block title %}Статистика{% endblock %}
 
 {% block content %}
@@ -12,4 +12,10 @@
         <li><b>{{ first_created_at }}</b> создана первая заметка</li>
         <li><b>{{ last_updated_at }}</b> обновлена последняя заметка</li>
     </ul>
+    <div id="app">
+    </div>
+    <script type="module" src="{% static 'web/notes-frontend/dist/assets/stat.js' %}"></script>
+    <script type="module" src="{% static 'web/notes-frontend/dist/assets/MyButton.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'web/notes-frontend/dist/assets/MyButton.css' %}">
+
 {% endblock %}
