@@ -1,15 +1,22 @@
 import time
 
+from django.contrib.auth import authenticate
 from django.db.models import Prefetch
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, mixins
-from rest_framework.generics import get_object_or_404
+from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
-from api.serializers import NoteSerializer, StatusSerializer, NoteEditorSerializer
+from api.serializers import (
+    NoteSerializer,
+    StatusSerializer,
+    NoteEditorSerializer,
+    LoginSerializer,
+    TokenResponseSerializer,
+)
 from web.models import Note, NoteComment
 from web.services import share_note
 
@@ -21,6 +28,23 @@ def status_view(request):
     """Проверить API"""
     time.sleep(10)
     return Response(StatusSerializer({"status": "ok", "user_id": request.user.id}).data)
+
+
+@swagger_auto_schema(
+    method="POST", request_body=LoginSerializer, responses={status.HTTP_200_OK: TokenResponseSerializer()}
+)
+@api_view(["POST"])
+@permission_classes([])
+def auth_view(request):
+    serializer = LoginSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = authenticate(request, **serializer.validated_data)
+    if user is None:
+        raise AuthenticationFailed()
+    token = Token.objects.create(user=user)
+    response_data = {"token": token.key}
+    response_serializer = TokenResponseSerializer(response_data)
+    return Response(response_serializer.data)
 
 
 class NoteViewSet(ModelViewSet):

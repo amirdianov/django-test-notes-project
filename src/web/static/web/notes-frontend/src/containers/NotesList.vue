@@ -3,7 +3,7 @@
   <p v-if="error" class="alert alert-danger">{{ error }}</p>
   <ul>
     <li v-for="note in notes" :key="note.id">
-      <b><a :href="`/notes/${note.id}`">{{note.title}}</a></b>
+      <b><a :href="`/notes/rere/${note.id}`">{{note.title}}</a></b>
     </li>
   </ul>
 </template>

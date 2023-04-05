@@ -4,6 +4,15 @@ from api.filelds import StdImageField
 from web.models import Note, User, NoteComment
 
 
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+
+class TokenResponseSerializer(serializers.Serializer):
+    token = serializers.CharField()
+
+
 class StatusSerializer(serializers.Serializer):
     status = serializers.CharField()
     user_id = serializers.IntegerField()
