@@ -1,5 +1,6 @@
 <template>
     <h1>Вход</h1>
+    <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
     <b-form @submit.prevent="submit">
         <b-form-group
                 id="input-group-1"
@@ -28,18 +29,32 @@
 </template>
 
 <script>
+
+
+import {login} from "../../services/api";
+import {storeToken} from "../../services/localData";
+
 export default {
     data() {
         return {
             form: {
                 email: "",
                 password: null
-            }
+            },
+            isLoading: false,
+            error: null
         }
     },
     methods: {
-        submit() {
-            console.log(this.form);
+        async submit() {
+            this.isLoading = true;
+            try {
+                const token = await login(this.form.email, this.form.password);
+                storeToken(token);
+            } catch (e) {
+                this.error = e.message;
+            }
+            this.isLoading = false;
         }
     }
 }
