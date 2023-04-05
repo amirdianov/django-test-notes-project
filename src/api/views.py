@@ -41,7 +41,7 @@ def auth_view(request):
     user = authenticate(request, **serializer.validated_data)
     if user is None:
         raise AuthenticationFailed()
-    token = Token.objects.create(user=user)
+    token, _ = Token.objects.get_or_create(user=user)
     response_data = {"token": token.key}
     response_serializer = TokenResponseSerializer(response_data)
     return Response(response_serializer.data)

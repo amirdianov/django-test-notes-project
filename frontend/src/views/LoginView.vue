@@ -1,7 +1,10 @@
 <template>
     <h1>Вход</h1>
     <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
-    <b-form @submit.prevent="submit">
+    <b-alert v-if="isSuccess" variant="success" show>
+        Вы успешно авторизованы!
+    </b-alert>
+    <b-form v-else @submit.prevent="submit">
         <b-form-group
                 id="input-group-1"
                 label="Электронная почта:"
@@ -22,6 +25,8 @@
                     v-model="form.password"
                     placeholder="Введите пароль"
                     required
+                    type="password"
+
             ></b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Войти</b-button>
@@ -42,7 +47,9 @@ export default {
                 password: null
             },
             isLoading: false,
-            error: null
+            error: null,
+            isSuccess: false,
+
         }
     },
     methods: {
@@ -51,6 +58,8 @@ export default {
             try {
                 const token = await login(this.form.email, this.form.password);
                 storeToken(token);
+                this.isSuccess = true;
+
             } catch (e) {
                 this.error = e.message;
             }
