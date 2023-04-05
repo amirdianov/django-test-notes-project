@@ -1,19 +1,22 @@
-
 <script setup>
-import {RouterLink, RouterView} from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import {RouterView} from 'vue-router'
 </script>
 
 <template>
-  <b-container>
-    <b-jumbotron
-        header="Bootstrap-Vue"
-        lead="Bootstrap v4 Components for Vue.js 2"
-    >
-      <p>Now running on @vue/compat and Vue.js 3</p>
-      <b-button variant="primary" @click="showModal"> Click me!</b-button>
-    </b-jumbotron>
-  </b-container>
+    <b-navbar toggleable="lg" type="dark" variant="info">
+        <b-container>
+            <b-navbar-brand to="/">Notes</b-navbar-brand>
 
-  <RouterView/>
+            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+            <b-collapse id="nav-collapse" is-nav>
+                <b-navbar-nav>
+                    <b-nav-item to="/">Home</b-nav-item>
+                    <b-nav-item to="/about">About</b-nav-item>
+                </b-navbar-nav>
+            </b-collapse>
+        </b-container>
+    </b-navbar>
+
+    <RouterView/>
 </template>
