@@ -1,26 +1,29 @@
-import {ref} from 'vue'
 import {defineStore} from 'pinia'
 import {storeToken} from "../../services/localData";
 import {login as ApiLogin} from "../../services/api";
 
 
-export const useAuthStore = defineStore('auth', () => {
-    const token = ref(null);
-    const isLoading = ref(false);
-    const isSuccess = ref(false);
-    const error = ref(null);
-
-    async function login(email, password) {
-        isLoading.value = true;
-        try {
-            const token = await ApiLogin(email, password);
-            storeToken(token);
-            isSuccess.value = true;
-        } catch (e) {
-            error.value = e.message;
+export const useAuthStore = defineStore('auth', {
+    state: () => {
+        return {
+            token: null,
+            isLoading: false,
+            isSuccess: false,
+            error: null
         }
-        isLoading.value = false;
-    }
-
-    return {login, error, isLoading};
-})
+    },
+    actions: {
+        async login(email, password) {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const token = await ApiLogin(email, password);
+                storeToken(token);
+                this.isSuccess = true;
+            } catch (e) {
+                this.error = e.message;
+            }
+            this.isLoading = false;
+        }
+    },
+});
