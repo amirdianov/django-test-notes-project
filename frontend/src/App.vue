@@ -11,8 +11,8 @@ import {RouterView} from 'vue-router'
 
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                    <b-nav-item to="/">Home</b-nav-item>
-                    <b-nav-item to="/login">Вход</b-nav-item>
+                    <b-nav-item :to="{name: 'home'}">Home</b-nav-item>
+                    <b-nav-item :to="{name: 'login'}">Вход</b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
         </b-container>
