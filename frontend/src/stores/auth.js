@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', {
         },
         async load() {
             this.isLoading = true;
-            this.user = await getProfile(this.token);
+            this.user = await getProfile();
             this.isLoading = false;
         }
     },

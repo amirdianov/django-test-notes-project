@@ -1,8 +1,18 @@
 import {API_URL} from "./consts";
 import axios from "axios";
+import {useAuthStore} from "@/stores/auth";
 
 const instance = axios.create({
     baseURL: API_URL,
+});
+instance.interceptors.request.use(function (config) {
+    const auth = useAuthStore();
+    if (auth.token) {
+        config.headers['Authorization'] = `Token ${auth.token}`;
+    }
+    return config;
+}, function (error) {
+    return Promise.reject(error);
 });
 
 export async function login(email, password) {
@@ -18,11 +28,7 @@ export async function login(email, password) {
     return response.data.token;
 }
 
-export async function getProfile(token) {
-    const response = await instance.get(`${API_URL}/profile/`, {
-        headers: {
-            "Authorization": `Token ${token}`
-        },
-    })
+export async function getProfile() {
+    const response = await instance.get(`${API_URL}/profile/`);
     return response.data;
 }
