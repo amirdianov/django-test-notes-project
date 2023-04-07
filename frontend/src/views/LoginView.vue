@@ -36,8 +36,8 @@
 <script>
 
 
-import {login} from "../../services/api";
-import {storeToken} from "../../services/localData";
+import {mapActions, mapState} from "pinia";
+import {useAuthStore} from "@/stores/auth";
 
 export default {
     data() {
@@ -46,27 +46,19 @@ export default {
                 email: "",
                 password: null
             },
-            isLoading: false,
-            error: null,
-            isSuccess: false,
-
         }
     },
     methods: {
+        ...mapActions(useAuthStore, ['login']),
         async submit() {
-            this.isLoading = true;
-            try {
-                const token = await login(this.form.email, this.form.password);
-                storeToken(token);
-                this.isSuccess = true;
-
-            } catch (e) {
-                this.error = e.message;
-            }
-            this.isLoading = false;
+            await this.login(this.form.email, this.form.password);
         }
+    },
+    computed: {
+        ...mapState(useAuthStore, ['error', 'isLoading']),
     }
 }
+
 </script>
 
 <style>
