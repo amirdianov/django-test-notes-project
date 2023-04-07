@@ -1,12 +1,12 @@
 import {defineStore} from 'pinia'
-import {storeToken} from "../../services/localData";
+import {getToken, storeToken} from "../../services/localData";
 import {getProfile, login as ApiLogin} from "../../services/api";
 
 
 export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
-            token: null,
+            token: getToken(),
             isLoading: false,
             isSuccess: false,
             error: null,
