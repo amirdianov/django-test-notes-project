@@ -18,6 +18,12 @@ class StatusSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "email", "role", "name")
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

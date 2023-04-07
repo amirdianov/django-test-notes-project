@@ -19,3 +19,12 @@ export async function login(email, password) {
     }
     return data.token;
 }
+
+export async function getProfile(token) {
+    const response = await fetch(`${API_URL}/profile/`, {
+        headers: {
+            "Authorization": `Token ${token}`
+        },
+    })
+    return await response.json();
+}

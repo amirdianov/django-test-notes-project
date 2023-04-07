@@ -16,6 +16,7 @@ from api.serializers import (
     NoteEditorSerializer,
     LoginSerializer,
     TokenResponseSerializer,
+    ProfileSerializer,
 )
 from web.models import Note, NoteComment
 from web.services import share_note
@@ -28,6 +29,13 @@ def status_view(request):
     """Проверить API"""
     time.sleep(10)
     return Response(StatusSerializer({"status": "ok", "user_id": request.user.id}).data)
+
+
+@swagger_auto_schema(method="GET", responses={status.HTTP_200_OK: ProfileSerializer()})
+@api_view(["GET"])
+def profile_view(request):
+    serializer = ProfileSerializer(request.user)
+    return Response(serializer.data)
 
 
 @swagger_auto_schema(

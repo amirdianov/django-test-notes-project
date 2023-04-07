@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {storeToken} from "../../services/localData";
-import {login as ApiLogin} from "../../services/api";
+import {getProfile, login as ApiLogin} from "../../services/api";
 
 
 export const useAuthStore = defineStore('auth', {
@@ -9,7 +9,8 @@ export const useAuthStore = defineStore('auth', {
             token: null,
             isLoading: false,
             isSuccess: false,
-            error: null
+            error: null,
+            user: null
         }
     },
     actions: {
@@ -18,12 +19,20 @@ export const useAuthStore = defineStore('auth', {
             this.error = null;
             try {
                 const token = await ApiLogin(email, password);
+                this.token = token;
                 storeToken(token);
+                this.load()
                 this.isSuccess = true;
             } catch (e) {
                 this.error = e.message;
             }
             this.isLoading = false;
+        },
+        async load() {
+            this.isLoading = true;
+            this.user = await getProfile(this.token);
+            this.isLoading = false;
         }
     },
+
 });
