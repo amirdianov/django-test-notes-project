@@ -1,10 +1,7 @@
 <template>
     <h1>Вход</h1>
     <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
-    <b-alert v-if="isSuccess" variant="success" show>
-        Вы успешно авторизованы!
-    </b-alert>
-    <b-form v-else @submit.prevent="submit">
+    <b-form @submit.prevent="submit">
         <b-form-group
                 id="input-group-1"
                 label="Электронная почта:"
@@ -52,10 +49,12 @@ export default {
         ...mapActions(useAuthStore, ['login']),
         async submit() {
             await this.login(this.form.email, this.form.password);
+            this.$router.push({name: "profile"});
+
         }
     },
     computed: {
-        ...mapState(useAuthStore, ['error', 'isLoading', 'isSuccess']),
+        ...mapState(useAuthStore, ['error', 'isLoading']),
     }
 }
 

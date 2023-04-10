@@ -8,7 +8,6 @@ export const useAuthStore = defineStore('auth', {
         return {
             token: getToken(),
             isLoading: false,
-            isSuccess: false,
             error: null,
             user: null
         }
@@ -22,7 +21,6 @@ export const useAuthStore = defineStore('auth', {
                 this.token = token;
                 storeToken(token);
                 this.load()
-                this.isSuccess = true;
             } catch (e) {
                 this.error = e.message;
             }
@@ -33,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
             try {
                 this.user = await getProfile();
             } catch (e) {
-                this.error = e.message;
+                console.error(e);
             }
             if (!this.user) {
                 this.logout();

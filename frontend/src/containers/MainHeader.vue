@@ -13,7 +13,7 @@
             </b-collapse>
 
             <b-navbar-nav class="ml-auto">
-                <b-nav-item v-if="user">{{ user.email }}</b-nav-item>
+                <b-nav-item v-if="user" :to="{name: 'profile'}">{{user.email}}</b-nav-item>
             </b-navbar-nav>
         </b-container>
     </b-navbar>
