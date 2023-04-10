@@ -35,6 +35,7 @@
 
 import {mapActions, mapState} from "pinia";
 import {useAuthStore} from "@/stores/auth";
+import {nextTick} from "vue";
 
 export default {
     data() {
@@ -49,8 +50,8 @@ export default {
         ...mapActions(useAuthStore, ['login']),
         async submit() {
             await this.login(this.form.email, this.form.password);
-            this.$router.push({name: "profile"});
-
+            await nextTick();
+            this.$router.push({name: "profile"})
         }
     },
     computed: {

@@ -12,6 +12,11 @@ export const useAuthStore = defineStore('auth', {
             user: null
         }
     },
+    getters: {
+        isAuth() {
+            return this.user !== null;
+        }
+    },
     actions: {
         async login(email, password) {
             this.isLoading = true;

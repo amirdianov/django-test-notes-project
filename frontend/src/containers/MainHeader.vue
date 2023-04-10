@@ -8,12 +8,12 @@
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
                     <b-nav-item :to="{name: 'home'}">Home</b-nav-item>
-                    <b-nav-item v-if="!user" :to="{name: 'login'}">Вход</b-nav-item>
+                    <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
 
             <b-navbar-nav class="ml-auto">
-                <b-nav-item v-if="user" :to="{name: 'profile'}">{{user.email}}</b-nav-item>
+                <b-nav-item v-if="isAuth" :to="{name: 'profile'}">{{user.email}}</b-nav-item>
             </b-navbar-nav>
         </b-container>
     </b-navbar>
@@ -25,7 +25,9 @@ import {mapState} from "pinia";
 
 export default {
     name: "MainHeader",
-    computed: mapState(useAuthStore, ['user'])
+    computed: {
+        ...mapState(useAuthStore, ['user', 'isAuth']),
+    }
 }
 </script>
 
