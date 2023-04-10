@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {getToken, storeToken} from "../../services/localData";
+import {clearToken, getToken, storeToken} from "../../services/localData";
 import {getProfile, login as ApiLogin} from "../../services/api";
 
 
@@ -30,8 +30,20 @@ export const useAuthStore = defineStore('auth', {
         },
         async load() {
             this.isLoading = true;
-            this.user = await getProfile();
+            try {
+                this.user = await getProfile();
+            } catch (e) {
+                this.error = e.message;
+            }
+            if (!this.user) {
+                this.logout();
+            }
             this.isLoading = false;
+        },
+        logout() {
+            this.user = null;
+            this.token = null;
+            clearToken();
         }
     },
 
