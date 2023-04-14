@@ -36,5 +36,9 @@ export async function getProfile() {
 export async function getNotes() {
     const response = await instance.get("/notes/");
     return response.data;
+}
 
+export async function getTags() {
+    const response = await instance.get("/tags/");
+    return response.data;
 }

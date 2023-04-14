@@ -11,7 +11,7 @@ export const useNotesStore = defineStore('notes', {
             count: null,
             params: {
                 search: null,
-                tagId: null
+                tag_id: null
             }
         }
     },
