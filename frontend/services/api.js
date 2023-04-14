@@ -29,6 +29,12 @@ export async function login(email, password) {
 }
 
 export async function getProfile() {
-    const response = await instance.get(`${API_URL}/profile/`);
+    const response = await instance.get('/profile/');
     return response.data;
+}
+
+export async function getNotes() {
+    const response = await instance.get("/notes/");
+    return response.data;
+
 }

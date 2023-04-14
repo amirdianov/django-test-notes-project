@@ -1,5 +1,5 @@
 <template>
-    <p><b>Имя:</b> {{ user.name }}</p>
+    <p><b>Имя:</b> {{ user.role }}</p>
     <p><b>Email:</b> {{ user.email }}</p>
     <b-btn variant="outline-primary" @click="logoutClickHandler">Выйти</b-btn>
 </template>

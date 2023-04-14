@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import NotesContainer from "@/containers/NotesContainer.vue";
+</script>
 
 <template>
     <main>
-        <h1>home</h1>
+        <NotesContainer></NotesContainer>
     </main>
 </template>
