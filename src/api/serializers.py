@@ -54,7 +54,7 @@ class NoteSerializer(NoteEditorSerializer):
     user = UserSerializer(read_only=True)
 
     comments = CommentSerializer(many=True, read_only=True)
-    text = serializers.CharField(write_only=True)
+    text = serializers.CharField()
 
     image = StdImageField(allow_null=True, required=False)
 
