@@ -8,7 +8,11 @@ export const useNotesStore = defineStore('notes', {
             isLoading: false,
             error: null,
             results: [],
-            count: null
+            count: null,
+            params: {
+                search: null,
+                tagId: null
+            }
         }
     },
     actions: {
@@ -24,5 +28,8 @@ export const useNotesStore = defineStore('notes', {
             }
             this.isLoading = false;
         },
+        setParameter(key, value) {
+            this.params[key] = value;
+        }
     },
 });
