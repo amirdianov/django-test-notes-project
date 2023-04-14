@@ -33,8 +33,8 @@ export async function getProfile() {
     return response.data;
 }
 
-export async function getNotes() {
-    const response = await instance.get("/notes/");
+export async function getNotes(params) {
+    const response = await instance.get("/notes/", {params});
     return response.data;
 }
 

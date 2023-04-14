@@ -20,7 +20,11 @@ export const useNotesStore = defineStore('notes', {
             this.isLoading = true;
             this.error = null;
             try {
-                const responseData = await getNotes();
+                const params = {
+                    ...this.params,
+                    title: this.params.search
+                }
+                const responseData = await getNotes(params);
                 this.results = responseData.results;
                 this.count = responseData.count;
             } catch (e) {

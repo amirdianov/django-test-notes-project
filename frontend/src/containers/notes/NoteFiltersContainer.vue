@@ -1,5 +1,5 @@
 <template>
-    <b-card>
+    <form action="" @submit.prevent="load">
         <b-input v-model="search" placeholder="Поиск"/>
         <TagsFilterContainer
                 :model-value="tagId"
@@ -9,7 +9,7 @@
         <b-button block type="submit" variant="outline-primary" class="mt-3">
             Найти
         </b-button>
-    </b-card>
+    </form>
 </template>
 
 <script>
@@ -20,9 +20,8 @@ import {useNotesStore} from "@/stores/note";
 export default {
     name: "NoteFiltersContainer",
     components: {TagsFilterContainer},
-    methods: {
-        ...mapActions(useNotesStore, ['setParameter']),
-    },
+    methods: mapActions(useNotesStore, ['setParameter', 'load']),
+
     computed: {
         ...mapState(useNotesStore, ['params']),
         search: {
