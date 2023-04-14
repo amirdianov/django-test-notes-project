@@ -1,6 +1,10 @@
 <template>
     <b-overlay :show="isLoading">
-        <b-form-select :options="options" :value="null" />
+        <b-form-select
+                :options="options"
+                :value="modelValue"
+                @change="setValue"
+        />
     </b-overlay>
 </template>
 
@@ -11,6 +15,10 @@ import {getTags} from "../../../services/api";
 
 export default {
     name: "TagsFilterContainer",
+    emits: ['update:modelValue'],
+    props: {
+        modelValue: String
+    },
     data() {
         return {
             results: [],
@@ -18,6 +26,9 @@ export default {
         };
     },
     methods: {
+        setValue(value) {
+            this.$emit("update:modelValue", value);
+        },
         async load() {
             this.isLoading = true;
             this.results = await getTags();
