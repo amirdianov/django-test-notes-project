@@ -2,6 +2,7 @@ import time
 
 from django.contrib.auth import authenticate
 from django.db.models import Prefetch
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
+from api.filters import NotesFilter
 from api.serializers import (
     NoteSerializer,
     StatusSerializer,
@@ -57,6 +59,9 @@ def auth_view(request):
 
 
 class NoteViewSet(ModelViewSet):
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = NotesFilter
+
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update"):
             return NoteEditorSerializer

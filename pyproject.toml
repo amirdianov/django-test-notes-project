@@ -23,6 +23,7 @@ gevent = "^22.10.2"
 python-dotenv = "^0.21.1"
 django-cors-headers = "^3.14.0"
 psycopg2 = ">=2.9.6,<2.10.0"
+django-filter = "^23.1"
 
 
 [tool.poetry.group.dev.dependencies]
