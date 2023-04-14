@@ -3,12 +3,12 @@ import time
 from django.contrib.auth import authenticate
 from django.db.models import Prefetch
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from api.serializers import (
     NoteSerializer,
@@ -17,8 +17,9 @@ from api.serializers import (
     LoginSerializer,
     TokenResponseSerializer,
     ProfileSerializer,
+    TagSerializer,
 )
-from web.models import Note, NoteComment
+from web.models import Note, NoteComment, Tag
 from web.services import share_note
 
 
@@ -82,6 +83,14 @@ class NoteViewSet(ModelViewSet):
         note = self.get_object()
         share_note(note)
         return Response({"status": "ok"})
+
+
+class TagsViewSet(mixins.ListModelMixin, GenericViewSet):
+    pagination_class = None
+    serializer_class = TagSerializer
+
+    def get_queryset(self):
+        return Tag.objects.filter(user=self.request.user)
 
 
 # @api_view(['GET', 'POST'])

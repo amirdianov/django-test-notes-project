@@ -18,10 +18,12 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
 
-from api.views import status_view, NoteViewSet, auth_view, profile_view
+from api.views import status_view, NoteViewSet, auth_view, profile_view, TagsViewSet
 
 router = SimpleRouter()
 router.register("notes", NoteViewSet, basename="notes")
+router.register("tags", TagsViewSet, basename="tags")
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Notes API",

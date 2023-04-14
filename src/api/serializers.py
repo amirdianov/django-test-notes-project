@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api.filelds import StdImageField
-from web.models import Note, User, NoteComment
+from web.models import Note, User, NoteComment, Tag
 
 
 class LoginSerializer(serializers.Serializer):
@@ -70,3 +70,9 @@ class NoteSerializer(NoteEditorSerializer):
         model = Note
         fields = ("id", "title", "text", "user", "comments", "image", "created_at")
         read_only_fields = ("title",)
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ("id", "title")
